@@ -206,17 +206,22 @@ Dari hasil evaluasi pada notebook, model terbaik adalah Randomforest karena nila
 
 - **Confusion Matrix**
     - Randomforest
-    ![rf_test](./Images/rf_test.png)
-    Penjelsan:
+
+        ![rf_test](./Images/rf_test.png)
+
+        Penjelasan:
         - TP = Terdapat 915 kasus risiko stroke yang diprediksi benar.
-        - TN = Terdapat 915 kasus non-risiko stroke yang diprediksi benar.
-        - FP = Terdapat 50 kasus non-risiko stroke yang diprediksi risiko stroke.
-        - FN = Terdapat 25 kasus risiko stroke yang diprediksi non-risiko stroke.
+         - TN = Terdapat 915 kasus non-risiko stroke yang diprediksi benar.
+         - FP = Terdapat 50 kasus non-risiko stroke yang diprediksi risiko stroke.
+         - FN = Terdapat 25 kasus risiko stroke yang diprediksi non-risiko stroke.
     - KNN
-    ![knn_test](./Images/knn_test.png)
-      - TP = Terdapat 931 kasus risiko stroke yang diprediksi benar.
-      - TN = Terdapat 787 kasus non-risiko stroke yang diprediksi benar.
-      - FP = Terdapat 151 kasus non-risiko stroke yang diprediksi risiko stroke.
-      - FN = Terdapat 9 kasus risiko stroke yang diprediksi non-risiko stroke.
+
+        ![knn_test](./Images/knn_test.png)
+
+        Penjelasan:
+        - TP = Terdapat 931 kasus risiko stroke yang diprediksi benar.
+        - TN = Terdapat 787 kasus non-risiko stroke yang diprediksi benar.
+        - FP = Terdapat 151 kasus non-risiko stroke yang diprediksi risiko stroke.
+        - FN = Terdapat 9 kasus risiko stroke yang diprediksi non-risiko stroke.
 
     Dari hasil confusion matrix di atas, dapat diketahui model yang memiliki bias yang minim adalah model Randomforest. Kesalahan prediksi pada model Randomforest hanya 75 data, sedangkan pada model KNN mencapai 160 data. Seacara keseluruhan, model sudah memiliki performa cukup bagus, adaikan tidak dilakukan balancing, kasalahan prediksi bisa jauh lebih tinggi dari jumlah sekarang.
