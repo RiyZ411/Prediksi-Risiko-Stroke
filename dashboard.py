@@ -34,15 +34,13 @@ set_png_as_page_bg('./Images/stroke.jpeg')
 model = joblib.load("./best_model.joblib")
 
 # Judul aplikasi
-st.markdown("<h1 style='text-align: center;'>Prediksi Stroke Berdasarkan Data Pasien</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Prediksi Risiko Stroke Berdasarkan Data Pasien</h1>", unsafe_allow_html=True)
 
 # Sidebar contact
 with st.sidebar:
     st.title("Profil")
     st.markdown("**Nama:** Riyan Zaenal Arifin")
     st.markdown("**Email:** riyanzaenal411@gmail.com")
-    st.markdown("**Cohort ID:** A327YBF437")
-    st.markdown("**Email Cohort:** A327YBF437@devacademy.id")
 
 with st.form("predict"):
     # Input numerik
