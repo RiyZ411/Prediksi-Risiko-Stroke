@@ -135,6 +135,7 @@ Berikut distribusi dari setiap fitur di atas
     Matrik korelasi menunjukkan bahwa terdapat korelasi yang tidak terlalu signifikan dengan parameter stroke. Hanya parameter age yang memilki nilai korelasi yang paling tinggi terhadap parameter stroke.
 
 - Distribusi Label
+
     ![label](./Images/label.png)
 
     Distribusi label di atas menunjukkan bahwa terdapat data yang tidak seimbang antara pasien beresiko stroke dan tidak. Mayoritas pasien adalah tidak beresiko stroke. Untuk mengatasi hal tersebut, akan dilakukan teknik SMOTE pada data preparation. 
@@ -154,6 +155,7 @@ Berikut distribusi dari setiap fitur di atas
     ![scaled](./Images/scaled.png)
 - **SMOTE** :
     Dalam kasus dataset yang tidak seimbang (misalnya jika jumlah kasus stroke jauh lebih sedikit dibandingkan non-stroke), model cenderung bias terhadap kelas mayoritas. SMOTE membantu dengan menyeimbangkan jumlah data di setiap kelas melalui pembuatan sampel sintetis di kelas minoritas, sehingga diperoleh data yang seimbang. Namun, SMOTE sering kali menghasilkan data duplikat. Untuk memastikan bahwa data tidak ada yang duplikat setelah proses SMOTE, maka perlu dilakukan drop data duplikat. Berikut hasil akhir proses SMOTE dan drop data duplikat:
+    
     ![smote](./Images/smote.png)
     Diperoleh total data untuk proses modelling sebanyak 9388 data.
 
@@ -172,35 +174,36 @@ Dari hasil evaluasi pada notebook, model terbaik adalah Randomforest karena nila
 
 ## Evaluation
 - **Akurasi** merupakan perbandingan antara jumlah data yang diprediksi dengan benar oleh model dan jumlah data keseluruhan. Dalam proyek ini, akurasi didefinisikan sebagai rasio prediksi yang tepat, baik untuk kasus risiko stroke maupun non-risiko stroke terhadap total data yang tersedia. Pada model Randomforest, akurasi data testing mencapai 95% dengan akurasi data training sebesar 99%. Sedangkan pada model KNN, akurasi data testing adalah 91% dan akurasi training mencapai 93%. Secara keseluruhan, kedua model menunjukkan performa yang sangat menjanjikan. Model Randomforest, dengan akurasi yang tinggi dan konsistensi antara data pelatihan dan pengujian, mengindikasikan kestabilan dan minim risiko overfitting. Sementara itu, meskipun model KNN memiliki angka yang sedikit lebih rendah, kinerjanya masih tergolong memuaskan dan memberikan dasar yang kuat untuk dilakukan optimasi lebih lanjut jika diperlukan. Berikut formula dari akurasi:
-    $$
-    Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
-    $$ 
+
+    ![acc](./Images/acc.png) 
+
     Di mana:
     - TP (True Positives): Jumlah kasus resiko stroke yang diprediksi dengan benar.
     - TN (True Negatives): Jumlah kasus non-resiko stroke yang diprediksi dengan benar.
     - FP (False Positives): Kasus non-resiko stroke yang salah diprediksi sebagai resiko stroke.
     - FN (False Negatives): Kasus resiko stroke yang salah diprediksi sebagai non-resiko stroke.
 - **Precision** adalah metrik yang digunakan untuk mengukur ketepatan prediksi positif, yaitu seberapa tepat prediksi kasus berisiko stroke dibandingkan dengan seluruh data yang diprediksi berisiko tersebut. Pada model Randomforest, precision mencapai 94% pada data testing dan 99% pada data training, menunjukkan bahwa sebagian besar prediksi positifnya benar. Sedangkan pada model KNN, precision yang diperoleh adalah 86% pada data testing dan 88% pada data training. Secara keseluruhan, model Random Forest dapat dikatakan sangat baik karena nilai precision yang tinggi menunjukkan keandalan dalam mengidentifikasi kasus risiko stroke, serta konsistensi antara data pelatihan dan pengujian. Model KNN, meskipun menghasilkan nilai precision yang lebih rendah, masih tergolong memuaskan untuk aplikasi deteksi awal risiko stroke. Berikut formula dari precision:
-    $$
-    Precision = \frac{TP}{TP + FP}
-    $$
+
+    ![prec](./Images/prec.png)
+
     Di mana:
     - TP (True Positives): Jumlah kasus resiko stroke yang diprediksi dengan benar.
     - FP (False Positives): Kasus non-resiko stroke yang salah diprediksi sebagai resiko stroke.
 - **Recall** adalah metrik untuk mengukur kemampuan model dalam menangkap semua kasus positif sebenarnya. Dalam proyek ini, diperoleh nilai recall model Randomforest pada data testing sebesar 97% dan data training sebesar 100%. Sedangkan pada model KNN diperoleh nilai pada data testing sebesar 99%  dan data testing sebesar 99%. Secara keseluruhan, kedua model menunjukkan performa recall yang sangat tinggi. Angka yang mendekati 100% menegaskan bahwa kedua model efektif dalam mendeteksi kasus-kasus positif risiko stroke, yang merupakan aspek krusial dalam konteks pendeteksian risiko stroke. Model KNN bahkan unggul dengan nilai recall lebih tinggi pada data testing, sementara model Randomforest menunjukkan kestabilan dengan performa sempurna pada data training. Berikut formula dari recall:
-    $$
-    Recall = \frac{TP}{TP + FN}
-    $$
+
+    ![recall](./Images/recall.png)
+
     Di mana:
     - TP (True Positives): Jumlah kasus resiko stroke yang diprediksi dengan benar.
     - FN (False Negatives): Kasus resiko stroke yang salah diprediksi sebagai non-resiko stroke.
 - **F1 score** adalah metrik yang mengukur keseimbangan antara precision dan recall, memberikan gambaran menyeluruh mengenai performa model dalam mengidentifikasi kasus positif. Dalam proyek ini, model Random Forest memperoleh nilai F1 score sebesar 96% pada data testing dan 99% pada data training, yang menunjukkan bahwa model ini memiliki performa yang sangat baik serta konsistensi yang tinggi antara data testing dan data training. Sementara itu, model KNN menghasilkan nilai F1 score sebesar 92% pada data testing dan 93% pada data training. Secara keseluruhan, kedua model menunjukkan performa yang menjanjikan dalam hal pengenalan kasus positif risiko stroke. Dengan F1 score yang sangat tinggi pada data testing, model Randomforest menonjol dalam hal generalisasi dan keandalan. Sementara itu, meskipun model KNN memiliki nilai F1 score yang sedikit lebih rendah, hasil yang diperoleh masih berada dalam kategori memuaskan. Hal ini mengindikasikan bahwa kedua model dapat diandalkan, meskipun model Randomforest memiliki keunggulan dalam stabilitas dan performa keseluruhan. Berikut formula dari F1 score:
-    $$
-    F1 = \frac{2 \cdot (\text{Precision} \cdot \text{Recall})}{\text{Precision} + \text{Recall}}
-    $$
+
+    ![f1](./Images/f1.png)
+
     Di mana:
     - Precision: Nilai Precision.
     - Recall: Nilai Recall.
+
 - **Confusion Matrix**
     - Randomforest
     ![rf_test](./Images/rf_test.png)
