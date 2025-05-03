@@ -2,6 +2,8 @@
 
 ## Domain Proyek
 
+<img src="./Images/stroke.jpeg" alt="stroke" style="width: 500px; height: 300px;">
+
 Stroke adalah penyebab utama kedua dari kematian dan salah satu faktor utama yang menyebabkan kecacatan di dunia [[1]](https://jurnal-d3per.uwhs.ac.id/index.php/mak/article/view/179). Kondisi ini terjadi akibat gangguan pada sistem pembuluh darah otak, yang menghambat aliran darah serta oksigen ke otak, sehingga mengakibatkan kerusakan atau bahkan kematian jaringan otak [[2]](https://fmj.fk.umi.ac.id/index.php/fmj/article/view/468/313). Faktor risiko seperti bertambahnya usia, gaya hidup tidak sehat (misalnya kebiasaan merokok, konsumsi alkohol, dan makanan cepat saji), stres kronis, kerja berlebihan, serta kurangnya olahraga, turut berkontribusi pada meningkatnya prevalensi stroke [[2]](https://fmj.fk.umi.ac.id/index.php/fmj/article/view/468/313).
 
 Pendekatan tradisional dalam mendeteksi risiko stroke biasanya membutuhkan waktu lama karena bergantung pada analisis klinis dan pemeriksaan laboratorium. Di sisi lain, teknologi machine learning menawarkan solusi yang lebih cepat dan akurat dengan menganalisis data medis secara efisien, termasuk integrasi faktor klinis, riwayat kesehatan, dan gaya hidup [[3]](https://digilib.uns.ac.id/dokumen/detail/121770/). Pendekatan ini memungkinkan prediksi risiko stroke yang lebih presisi, mendukung tenaga medis untuk melakukan intervensi preventif yang tepat waktu.
@@ -56,6 +58,8 @@ Berikut distribusi dari setiap fitur di atas
     Secara keseluruhan, mayoritas tipe data pada dataset adalah numerik
 
     ![describe](./Images/describe.png)
+
+    Penjelasan:
     - id
     Nilai Minimum (min): 67
     Nilai Maksimum (max): 72.940
@@ -109,8 +113,10 @@ Berikut distribusi dari setiap fitur di atas
 
 - Distribusi Dataset
     - Fitur Numerik
-    ![Fitur Numerik](./Images/num.png)
-    Penjelasan:
+
+        ![Fitur Numerik](./Images/num.png)
+
+        Penjelasan:
         - Distribusi id: Histogram ini menampilkan distribusi ID individu dalam dataset, dengan nilai berkisar antara 0 hingga sekitar 70,000. Sebagian besar ID memiliki jumlah yang cukup konsisten, berkisar antara 125 hingga 200.
         - Distribusi age (Usia): Distribusi usia menunjukkan rentang dari 0 hingga 80 tahun. Jumlah individu meningkat seiring bertambahnya usia dan mencapai puncak sekitar usia 60 tahun, kemudian menurun setelahnya.
         - Distribusi hypertension (Hipertensi): Distribusi status hipertensi menunjukkan nilai 0 dan 1, di mana nilai 0 jauh lebih dominan. Artinya, mayoritas individu tidak menderita hipertensi.
@@ -120,8 +126,10 @@ Berikut distribusi dari setiap fitur di atas
         - Distribusi stroke (Riwayat Stroke): Status stroke menunjukkan nilai 0 dan 1. Mayoritas individu memiliki nilai 0, yang berarti mereka tidak beresiko mengalami stroke.
 
     - Fitur Kategori
-    ![Fitur Kategori](./Images/cat.png)
-    Penjelasan:
+
+        ![Fitur Kategori](./Images/cat.png)
+
+        Penjelasan:
         - Distribusi Gender: Female memiliki jumlah yang paling dominan, diikuti oleh Male. Kategori Other tidak memiliki jumlah sama sekali, sehingga akan dilakukan penghapusan di tahap data preparation. 
         - Distribusi Ever Married: Individu dengan status Yes (sudah menikah) lebih banyak dibandingkan dengan yang belum menikah (No).
         - Distribusi Work Type: Private memiliki jumlah tertinggi, diikuti oleh Self-employed dan Govt_job. Sementara kategori children dan Never_worked memiliki jumlah yang lebih kecil.
@@ -143,20 +151,29 @@ Berikut distribusi dari setiap fitur di atas
 ## Data Preparation
 - **Hapus Data Missing** :
     Data yang hilang (missing values) dapat mengganggu algoritma machine learning, menyebabkan bias, atau menghasilkan model yang kurang akurat. Data kosong menyebabkan model sulit mengenali pola saat proses training. Berikut hasil proses hapus data missing, terlihat jumlah data berkurang menjadi 4909 data:
+
     ![dropmiss](./Images/dropmiss.png)
+
 - **One Hot Encoding** :
     Banyak algoritma machine learning memerlukan input numerik. Variabel kategorikal harus diubah ke dalam format numerik agar dapat diproses dengan benar. One Hot Encoding mengonversi tiap kategori ke dalam kolom biner (0 atau 1), sehingga informasi kategorikal dapat diinterpretasikan oleh model. Dari proses one hot encoding, jumlah kolom bertambah menjadi 23 kolom, berikut hasilnya:
+
     ![1hot](./Images/1hot.png)
+
 - **Feature Selection** :
     Tidak semua fitur memiliki pengaruh yang signifikan dalam prediksi model. Dengan memilih fitur yang paling relevan, kita dapat mengurangi kompleksitas model, mencegah overfitting, dan meningkatkan performa model. Proses ini juga membantu mempercepat waktu pelatihan dengan menghapus fitur yang tidak informatif. Beberapa fitur yang akan dieliminasi adalah id, Residence_type_Rural, Residence_type_Urban, smoking_status_Unknown, dan gender_Other. Fitur-fitur tersebut akan dihapus karena tidak memiliki relevansi dengan label. Berikut Hasil proses feature selection, jumlah kolom berkurang menjadi 18 kolom:
+
     ![featsel](./Images/featsel.png)
+
 - **Normalisasi Data** :
     Fitur numerik sering berbeda skalanya, yang bisa membuat model lebih condong pada fitur dengan rentang nilai yang besar. Normalisasi menyamakan skala fitur, sehingga algoritma yang sensitif terhadap skala dapat bekerja lebih optimal dan konvergensi model menjadi lebih stabil. Berikut hasil normalisasi data: 
+
     ![scaled](./Images/scaled.png)
+
 - **SMOTE** :
     Dalam kasus dataset yang tidak seimbang (misalnya jika jumlah kasus stroke jauh lebih sedikit dibandingkan non-stroke), model cenderung bias terhadap kelas mayoritas. SMOTE membantu dengan menyeimbangkan jumlah data di setiap kelas melalui pembuatan sampel sintetis di kelas minoritas, sehingga diperoleh data yang seimbang. Namun, SMOTE sering kali menghasilkan data duplikat. Untuk memastikan bahwa data tidak ada yang duplikat setelah proses SMOTE, maka perlu dilakukan drop data duplikat. Berikut hasil akhir proses SMOTE dan drop data duplikat:
     
     ![smote](./Images/smote.png)
+
     Diperoleh total data untuk proses modelling sebanyak 9388 data.
 
 ## Modeling
