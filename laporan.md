@@ -176,7 +176,7 @@ Berikut distribusi dari setiap fitur di atas
 
     Diperoleh total data untuk proses modelling sebanyak 9388 data.
 
-## Modeling
+## Model Development
 - **Spliting Data** : Data yang sudah melalui data preparation selanjutnya akan dibagi menjadi data training dan data testing. Data training untuk melatih model, sedangkan data testing untuk menguji model hasil training. Pembagian data training dan data testing adalah 80% data training dan 20% data testing.
 - **Training Model** : Proses training model dilakukan dengan 2 algoritma machine learning, yaitu Randomforest dan KNN. Berikut penjelasan terkait algoritma tersebut:
     - **Randomforest**
