@@ -3,6 +3,8 @@
 
 # %% [markdown]
 # ## Import Library
+# 
+# Kode berikut untuk mengimport library yang akan digunakan.
 
 # %%
 import pandas as pd
@@ -23,25 +25,34 @@ import pkg_resources
 
 # %% [markdown]
 # ## Import Dataset
+# 
+# Kode berikut menampilkan bentuk dari dataset yang digunakan. Terlihat 5110 baris data dan 12 kolom
 
 # %%
 df = pd.read_csv('/home/riyan/Machine Learning Terapan/Proyek Pertama/healthcare-dataset-stroke-data.csv')
 df
 
 # %% [markdown]
-# ## Exploratory Data Analysis
+# ### Exploratory Data Analysis
 
 # %% [markdown]
-# ### Gambaran Dataset
+# #### Gambaran Dataset
+# 
+# Kode-kode di bawah akan menampilkan gambaran dari dataset yang digunakan, seperti tipe data dan analisis deskriptif
 
 # %%
 df.info()
+
+# %% [markdown]
+# Dari kode di atas, mayoritas tipe data pada dataset adalah numerik
 
 # %%
 df.describe(include='all')
 
 # %% [markdown]
-# ### Cek Data Missing
+# #### Cek Data Missing
+# 
+# Fungsi berikut digunakan untuk mengecek data yang kosong
 
 # %%
 def missing_values(df):
@@ -56,20 +67,27 @@ def missing_values(df):
     missing_values.reset_index(inplace=True)
     return missing_values
 
+# %% [markdown]
+# Hasil pengecekan menunjukkan bahwa terdapat 201 data kosong pada kolom bmi
+
 # %%
 missing_values(df)
 
 # %% [markdown]
-# ### Cek Data Duplikat
+# #### Cek Data Duplikat
+# 
+# Kode berikut untuk melihat berapa jumlah data duplikat. Terlihat tidak ada data yang duplikat
 
 # %%
 print("Jumlah duplikat: ", df.duplicated().sum())
 
 # %% [markdown]
-# ### Distribusi Data
+# #### Distribusi Data
 
 # %% [markdown]
-# #### Distribusi Fitur Numerik
+# ##### Distribusi Fitur Numerik
+# 
+# Kode berikut digunakan untuk melihat distribusi data numerik
 
 # %%
 num_features = df.select_dtypes(include=[np.number])
@@ -83,6 +101,8 @@ plt.show()
 
 # %% [markdown]
 # #### Distribusi Fitur Kategorik
+# 
+# Kode berikut digunakan untuk melihat distribusi data kategorik
 
 # %%
 cat_features = df.select_dtypes(include=[object])
@@ -95,7 +115,9 @@ plt.tight_layout()
 plt.show()
 
 # %% [markdown]
-# ### Matrik Korelasi
+# #### Matrik Korelasi
+# 
+# Kode berikut digunakan untuk menampilkan korelasi antar fitur numerik
 
 # %%
 # Heatmap korelasi untuk fitur numerik
@@ -106,7 +128,9 @@ plt.title('Heatmap Korelasi')
 plt.show()
 
 # %% [markdown]
-# ### Distribusi Label
+# #### Distribusi Label
+# 
+# Kode berikut menampilkan distribusi jumlah data dari label untuk mengetahui apakah data label imblance atau tidak
 
 # %%
 plt.figure(figsize=(8, 4))
@@ -119,6 +143,8 @@ plt.show()
 
 # %% [markdown]
 # ### Hapus Data Missing
+# 
+# Kode berikut digunakan menghapus data yang kosong
 
 # %%
 # Hapus data kosong
@@ -127,6 +153,8 @@ df
 
 # %% [markdown]
 # ### One Hot Encoding
+# 
+# Kode berikut digunakan untuk mengubah fitur kategori menjadi sebuah kolom baru
 
 # %%
 kategori_fitur = df.select_dtypes(include=['object']).columns
@@ -136,17 +164,18 @@ encoded
 
 # %% [markdown]
 # ### Feature Selection
+# 
+# Kode berikut digunakan untuk menghapus fitur yang tidak memiliki pengaruh terhadap label
 
 # %%
 df = encoded.drop(columns=['id', 'Residence_type_Rural', 'Residence_type_Urban', 'smoking_status_Unknown', 'gender_Other'])
 df
 # 
 
-# %%
-df.describe(include='all')
-
 # %% [markdown]
 # ### Normalisasi Data
+# 
+# Kode berikut digunakan untuk mengubah skala data
 
 # %%
 # Contoh data (misalnya X adalah fitur, y adalah label)
@@ -159,12 +188,17 @@ X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
 X_scaled = pd.concat([X_scaled.reset_index(drop=True), y.reset_index(drop=True)], axis=1)
 X_scaled
 
+# %% [markdown]
+# Kode berikut digunakan untuk menyimpan hasil skala data
+
 # %%
 # Simpan scaler ke file 'scaler.joblib'
 joblib.dump(scaler, '/home/riyan/Machine Learning Terapan/Proyek Pertama/scaler.joblib')
 
 # %% [markdown]
 # ### SMOTE
+# 
+# Kode berikut digunakan untuk proses SMOTE agar diperoleh data baru pada label yang datanya masih kurang 
 
 # %%
 # Terapkan SMOTE
@@ -173,6 +207,9 @@ X_resampled, y_resampled = smote.fit_resample(X_scaled, y)
 X_resampled = X_resampled.drop_duplicates()
 X_resampled
 
+# %% [markdown]
+# Kode berikut digunakan untuk melihat hasil dari proses SMOTE
+
 # %%
 plt.figure(figsize=(8, 4))
 sns.countplot(x='stroke', data=X_resampled, palette='viridis')
@@ -180,10 +217,9 @@ plt.title('Distribusi Variabel Target (stroke)')
 plt.show()
 
 # %% [markdown]
-# ## Model Development
-
-# %% [markdown]
 # ### Spliting Data
+# 
+# Kode berikut digunakan untuk membagi dataset menjadi data training dan data testing
 
 # %%
 X = X_resampled.drop(columns=['stroke'])  # Fitur
@@ -192,7 +228,9 @@ y = X_resampled['stroke']  # Label
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
 # %% [markdown]
-# ### Training Model
+# ## Model Development
+# 
+# Kode berikut digunakan untuk proses training model
 
 # %%
 # Buat model Random Forest
@@ -201,6 +239,8 @@ knn = KNeighborsClassifier().fit(X_train, y_train)
 
 # %% [markdown]
 # ## Evaluation
+# 
+# Kode berikut digunakan untuk melihat hasil evaluasi
 
 # %%
 def evaluate_model(model, X_test, y_test):
@@ -222,12 +262,17 @@ def evaluate_model(model, X_test, y_test):
 
 # %% [markdown]
 # ### Evaluation Data Testing
+# 
+# Kode berikut digunakan untuk evaluasi data testing
 
 # %%
 results = {
     'Random Forest (RF)': evaluate_model(rf, X_test, y_test),
     'K-Nearest Neighbors (KNN)': evaluate_model(knn, X_test, y_test),
 }
+
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan hasil evaluasi data testing
 
 # %%
 # Buat DataFrame untuk meringkas hasil
@@ -249,6 +294,9 @@ summary_df = pd.DataFrame(rows)
 
 # Tampilkan DataFrame
 print(summary_df)
+
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan confusion matrix testing dari model Randomforest
 
 # %%
 # Hitung confusion matrix
@@ -263,11 +311,17 @@ plt.ylabel('Actual')
 plt.title('Confusion Matrix Heatmap')
 plt.show()
 
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan classification report testing model Randomforest
+
 # %%
 # Classification Report
 class_report = classification_report(y_test, y_pred)
 print("\nClassification Report:")
 print(class_report)
+
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan confusion matrix testing dari model KNN
 
 # %%
 # Hitung confusion matrix
@@ -282,6 +336,9 @@ plt.ylabel('Actual')
 plt.title('Confusion Matrix Heatmap')
 plt.show()
 
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan classification report testing model KNN
+
 # %%
 # Classification Report
 class_report = classification_report(y_test, y_pred)
@@ -290,12 +347,17 @@ print(class_report)
 
 # %% [markdown]
 # ### Evaluation Data Training
+# 
+# Kode berikut digunakan untuk evaluasi data training
 
 # %%
 results = {
     'Random Forest (RF)': evaluate_model(rf, X_train, y_train),
     'K-Nearest Neighbors (KNN)': evaluate_model(knn, X_train, y_train)
 }
+
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan hasil evaluasi data training
 
 # %%
 # Buat DataFrame untuk meringkas hasil
@@ -318,6 +380,9 @@ summary_df = pd.DataFrame(rows)
 # Tampilkan DataFrame
 print(summary_df)
 
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan confusion matrix training dari model Randomforest
+
 # %%
 # Hitung confusion matrix
 y_pred = rf.predict(X_train)
@@ -331,11 +396,17 @@ plt.ylabel('Actual')
 plt.title('Confusion Matrix Heatmap')
 plt.show()
 
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan classification report training model Randomforest
+
 # %%
 # Classification Report
 class_report = classification_report(y_train, y_pred)
 print("\nClassification Report:")
 print(class_report)
+
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan confusion matrix training dari model KNN
 
 # %%
 # Hitung confusion matrix
@@ -350,6 +421,9 @@ plt.ylabel('Actual')
 plt.title('Confusion Matrix Heatmap')
 plt.show()
 
+# %% [markdown]
+# Kode berikut digunakan untuk menampilkan classification report training model KNN
+
 # %%
 # Classification Report
 class_report = classification_report(y_train, y_pred)
@@ -358,12 +432,16 @@ print(class_report)
 
 # %% [markdown]
 # ## Simpan Model
+# 
+# Kode berikut digunakan untuk menyimpan model terbaik, yakni model Randomforest
 
 # %%
 joblib.dump(rf, '/home/riyan/Machine Learning Terapan/Proyek Pertama/best_model.joblib')
 
 # %% [markdown]
 # ## Simpan Library
+# 
+# Kode berikut diguanakan untuk menyimpan library yang digunakan beserta pembuatan file requirements.txt
 
 # %%
 installed_packages = {pkg.key for pkg in pkg_resources.working_set}
