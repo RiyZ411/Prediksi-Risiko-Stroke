@@ -19,24 +19,32 @@ Referensi:
 ## Business Understanding
 
 ### Problem Statements
-- **Tingginya Beban Stroke Global** - 
-Stroke otak merupakan penyebab utama kematian dan kecacatan di dunia, sehingga meningkatnya jumlah kasus stroke menimbulkan beban kesehatan dan ekonomi yang signifikan.
+- Tingginya Beban Stroke Global - Tingginya beban stroke global tidak hanya berdampak pada kesehatan individu tetapi juga menimbulkan implikasi ekonomi yang signifikan. Biaya pengobatan yang tinggi, penurunan produktivitas tenaga kerja, serta meningkatnya tekanan pada sistem kesehatan menjadi tantangan besar bagi berbagai sektor industri, termasuk asuransi kesehatan dan layanan medis
 
-- **Deteksi dan Diagnosis yang Lambat** - Metode tradisional untuk mendeteksi dan mengurangi risiko stroke sering kali bergantung pada penilaian klinis dan pemeriksaan laboratorium yang memakan waktu, menghambat intervensi cepat yang penting untuk mengurangi dampak stroke.
+- Deteksi dan Diagnosis yang Lambat - Deteksi dan diagnosis yang lambat menyebabkan keterlambatan intervensi medis, yang memperparah tingkat keparahan stroke dan meningkatkan biaya pemulihan pasien.
 
 ### Goals
-- Menciptakan model prediksi risiko stroke berbasis machine learning yang akurat, tidak overfitting, dan minim bias.
+Membangun model prediksi risiko stroke berbasis machine learning yang memungkinkan intervensi lebih cepat dan lebih efisien bagi penyedia layanan kesehatan serta perusahaan asuransi. Model yang dikembangkan harus:
+- Memberikan hasil prediksi yang akurat sehingga dapat membantu dalam pengambilan keputusan medis,
+- Minim bias agar dapat diterapkan di berbagai kelompok populasi tanpa mengorbankan validitas hasil,
+- Tidak overfitting, sehingga dapat digunakan secara luas dalam berbagai skenario klinis dan bisnis.
 
 ### Solution statements
-- **Mengoptimalkan Proses Data Preparation** Data sangat berpengaruh terhadapat proses training model. Untuk menghindari model bias, model harus dioptimalkan, contohnya jika data label imbalance, maka akan dilakukan balancing menggunakan teknik SMOTE atau yang lain.
+Untuk mencapai tujuan tersebut, beberapa pendekatan yang dapat dilakukan meliputi:
+- Mengoptimalkan Proses Data Preparation
+    - Memastikan kualitas data melalui proses pembersihan dan normalisasi,
+    - Mengatasi masalah imbalance data dengan metode seperti SMOTE guna meningkatkan performa model dalam memprediksi pasien berisiko tinggi.
 
-- **Pengembangan Beberapa Model Machine Learning** Berbagai algoritma akan diterapkan untuk menghasilkan model machine learning yang paling optimal berdasarkan dataset yang tersedia. Model yang optimal tentunya model yang memilki evaluasi metrik tertinggi dan tidak overfitting.
+- Pengembangan Beberapa Model Machine Learning
+    - Melakukan pembangunan beberapa algoritma untuk mendapatkan model dengan performa terbaik berdasarkan evaluasi metrik seperti akurasi, precision, recall, dan f1 score baik pada data testing maupun pada data training.
+    - Menggunakan teknik ensemble learning untuk meningkatkan generalisasi model dalam konteks bisnis kesehatan.
 
 
 ## Data Understanding
 Dataset yang digunakan adalah [Stroke Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset) yang diperoleh dari Kaggle. Dataset tersebut digunakan untuk memprediksi apakah seorang pasien kemungkinan besar akan terkena stroke berdasarkan parameter input seperti jenis kelamin, usia, berbagai penyakit, dan status merokok. Dataset tersebut berjumlah 5110 baris data dan 12 kolom.
 
 Fitur-fitur pada stroke prediction dataset adalah sebagai berikut:
+- id: nilai unik dari setiap pengguna
 - gender: "Male", "Female" atau "Other"
 - age: usia pasien
 - hypertension: 0 jika pasien tidak memiliki hipertensi, 1 jika pasien memiliki hipertensi
@@ -55,7 +63,7 @@ Berikut distribusi dari setiap fitur di atas
 
     ![info](./Images/info.png)
 
-    Secara keseluruhan, mayoritas tipe data pada dataset adalah numerik
+    Mayoritas tipe data pada dataset adalah numerik
 
     ![describe](./Images/describe.png)
 
@@ -176,15 +184,53 @@ Berikut distribusi dari setiap fitur di atas
 
     Diperoleh total data untuk proses modelling sebanyak 9388 data.
 
+- **Spliting Data** : 
+    Data yang sudah melalui data preparation selanjutnya akan dibagi menjadi data training dan data testing. Data training untuk melatih model, sedangkan data testing untuk menguji model hasil training. Pembagian data training dan data testing adalah 80% data training dan 20% data testing.
+
+
 ## Model Development
-- **Spliting Data** : Data yang sudah melalui data preparation selanjutnya akan dibagi menjadi data training dan data testing. Data training untuk melatih model, sedangkan data testing untuk menguji model hasil training. Pembagian data training dan data testing adalah 80% data training dan 20% data testing.
-- **Training Model** : Proses training model dilakukan dengan 2 algoritma machine learning, yaitu Randomforest dan KNN. Berikut penjelasan terkait algoritma tersebut:
-    - **Randomforest**
-        - **Kelebihan** : Algoritma Random Forest merupakan salah satu metode ensemble learning (bagging) yang menggabungkan keputusan dari banyak decision tree melalui mekanisme voting. Pendekatan ini cenderung menghasilkan model yang lebih akurat karena mampu mengurangi variansi dan mengatasi overfitting.
-        - **Kekurangan** : Salah satu kekurangan Random Forest adalah waktu pelatihan yang relatif lama, karena setiap decision tree harus dilatih secara terpisah. Secara default, algoritma ini menggunakan 100 decision tree, yang dapat meningkatkan beban komputasi.
-    - **K-Nearest Neighbors (KNN)**
-        - **Kelebihan** : Algoritma KNN tidak memerlukan proses pelatihan yang kompleks. Metode ini hanya melakukan perhitungan jarak (distance) antara data baru dengan data yang sudah ada. Karena perhitungan jarak pada dataset dengan dimensi rendah relatif cepat, algoritma ini cocok untuk kasus tersebut.
-        - **Kekurangan** : KNN kurang optimal untuk dataset dengan dimensi tinggi karena perhitungan jarak antar data menjadi semakin kompleks dan memakan waktu yang cukup lama.
+Proses training model dilakukan dengan 2 algoritma machine learning, yaitu Randomforest dan KNN. Berikut penjelasan terkait algoritma tersebut:
+- **Randomforest** : Cara kerja algoritma Randomforest adalah dengan membuat banyak pohon keputusan secara acak dan menggabungkan hasil prediksi mereka melalui voting atau rata-rata, sehingga menghasilkan model yang stabil dan akurat. Berikut penjelasan paramter pada algoritma Randomforest:
+
+    | **Parameter**          | **Deskripsi** | **Nilai Default** |
+    |----------------------|--------------------------------------|---------------|
+    | `n_estimators`      | Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil modelnya. | `100` |
+    | `criterion`         | Metrik untuk mengukur kualitas pemisahan dalam setiap node. | `"gini"` (klasifikasi), `"squared_error"` (regresi) |
+    | `max_depth`         | Kedalaman maksimum setiap pohon. Nilai `None` memungkinkan pohon berkembang hingga semua daun hanya memiliki satu sampel. | `None` |
+    | `min_samples_split` | Jumlah sampel minimum yang diperlukan untuk membagi node. | `2` |
+    | `min_samples_leaf`  | Jumlah minimum sampel yang harus ada di setiap daun pohon. | `1` |
+    | `max_features`      | Jumlah fitur yang dipilih secara acak untuk setiap pohon. | `"sqrt"` (klasifikasi), `"auto"` (regresi) |
+    | `bootstrap`         | Apakah menggunakan sampling dengan penggantian dalam pembentukan pohon. | `True` |
+    | `max_samples`       | Jika `bootstrap=True`, menentukan jumlah sampel yang diambil dari dataset untuk membentuk setiap pohon. | `None` (menggunakan semua data) |
+    | `random_state`      | Nilai seed untuk memastikan hasil yang konsisten. | `None` |
+    | `n_jobs`           | Menentukan jumlah core CPU yang digunakan untuk pelatihan model secara paralel (`-1` menggunakan semua core). | `None` |
+    | `verbose`          | Tingkat log selama pelatihan, semakin tinggi nilainya semakin banyak informasi yang ditampilkan. | `0` (tanpa log) |
+    | `warm_start`       | Jika `True`, model dapat dilanjutkan dari hasil sebelumnya tanpa harus membangun ulang dari awal. | `False` |
+
+    Pada proyek ini, parameter yang digunakan adalah deafult, sama seperti pada tabel di atas. Algoritma Randomforest memiliki kelebihan dan kekurangan. Berikut penjelasannya:
+
+    | **Kelebihan** | **Kekurangan** |
+    |--------------|---------------|
+    | Algoritma Random Forest merupakan salah satu metode ensemble learning (bagging) yang menggabungkan keputusan dari banyak decision tree melalui mekanisme voting. Pendekatan ini cenderung menghasilkan model yang lebih akurat karena mampu mengurangi variansi dan mengatasi overfitting. | Salah satu kekurangan Random Forest adalah waktu pelatihan yang relatif lama, karena setiap decision tree harus dilatih secara terpisah. Secara default, algoritma ini menggunakan 100 decision tree, yang dapat meningkatkan beban komputasi. |
+
+- **K-Nearest Neighbors (KNN)** : Cara kerja KNN adalah dengan menggunakan pendekatan berbasis tetangga terdekat, di mana sebuah data baru diklasifikasikan berdasarkan mayoritas label dari K tetangga terdekat atau dirata-ratakan untuk regresi. Berikut penjelasan paramter pada algoritma KNN:
+
+    | **Parameter**      | **Deskripsi** | **Nilai Default** |
+    |------------------|-------------------------------------------------|---------------|
+    | `n_neighbors`    | Jumlah tetangga terdekat yang digunakan untuk klasifikasi atau regresi. | `5` |
+    | `weights`       | Cara memberikan bobot ke tetangga (`uniform` untuk bobot sama, `distance` untuk bobot berdasarkan jarak). | `"uniform"` |
+    | `algorithm`     | Metode pencarian tetangga (`auto`, `ball_tree`, `kd_tree`, `brute`). | `"auto"` |
+    | `metric`       | Metrik jarak yang digunakan (`euclidean`, `manhattan`, `minkowski`, dll.). | `"minkowski"` |
+    | `p`            | Parameter untuk menentukan kekuatan norm dalam metrik Minkowski (`p=1` untuk Manhattan, `p=2` untuk Euclidean). | `2` |
+    | `leaf_size`    | Ukuran daun dalam struktur pohon untuk optimasi pencarian (`ball_tree`, `kd_tree`). | `30` |
+    | `n_jobs`       | Jumlah core CPU yang digunakan untuk pencarian paralel (`-1` menggunakan semua core). | `None` |
+
+    Pada proyek ini, parameter yang digunakan adalah deafult, sama seperti pada tabel di atas. Algoritma KNN memiliki kelebihan dan kekurangan. Berikut penjelasannya:
+
+    | **Kelebihan** | **Kekurangan** |
+    |--------------|---------------|
+    | Algoritma KNN tidak memerlukan proses pelatihan yang kompleks. Metode ini hanya melakukan perhitungan jarak (distance) antara data baru dengan data yang sudah ada. Karena perhitungan jarak pada dataset dengan dimensi rendah relatif cepat, algoritma ini cocok untuk kasus tersebut. | KNN kurang optimal untuk dataset dengan dimensi tinggi karena perhitungan jarak antar data menjadi semakin kompleks dan memakan waktu yang cukup lama. |
+
 
 **Pemiliha Model Terbaik**
 Dari hasil evaluasi pada notebook, model terbaik adalah Randomforest karena nilai evaluasi metrik seperti (akurasi, precision, recall, dan F1 score) cenderung lebih tinggi dibanding nilai evaluasi metrik dari model KNN. Selain itu, model tidak overfitting, karena range evaluasi metrik pada data testing dan data training tidak terlalu jauh.
